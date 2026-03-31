@@ -1,19 +1,27 @@
 import User from '../models/user.js';
+import crypto from 'crypto';
 
 // Get current user profile
 export const getProfile = async (req, res) => {
   try {
-    const supabaseId = req.user.sub; // From Supabase JWT
-    let user = await User.findOne({ supabaseId });
+    const supabaseUser = req.user;
+    let user = await User.findOne({ supabaseId: supabaseUser.sub });
 
     if (!user) {
-      // If user doesn't exist in MongoDB yet, create from Supabase info
+      // Auto-sync: Create MongoDB user if it doesn't exist but exists in Supabase
+      const referralCode = crypto.randomBytes(4).toString('hex').toUpperCase();
       user = await User.create({
-        supabaseId,
-        email: req.user.email,
-        fullName: req.user.user_metadata?.full_name || '',
-        avatarUrl: req.user.user_metadata?.avatar_url || '',
+        supabaseId: supabaseUser.sub,
+        email: supabaseUser.email,
+        fullName: supabaseUser.user_metadata?.full_name || '',
+        points: 500, // Welcome bonus
+        referralCode: referralCode,
+        preferences: { theme: 'dark', notifications: { push: true, email: true } }
       });
+    } else if (!user.referralCode) {
+      // Generate referral code for existing users who don't have one
+      user.referralCode = crypto.randomBytes(4).toString('hex').toUpperCase();
+      await user.save();
     }
 
     res.status(200).json(user);

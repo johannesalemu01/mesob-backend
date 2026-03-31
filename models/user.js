@@ -14,6 +14,8 @@ const userSchema = new mongoose.Schema(
         email: { type: Boolean, default: true },
       },
     },
+    points: { type: Number, default: 500 },
+    referralCode: { type: String, unique: true, sparse: true },
     createdAt: { type: Date, default: Date.now },
   },
   {
