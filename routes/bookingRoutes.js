@@ -11,7 +11,7 @@ import {
   searchRestaurants,
   createRestaurant,
 } from '../controllers/restaurantController.js';
-import supabaseAuth from '../middleware/supabaseAuth.js';
+import supabaseAuth from '../middlewares/supabaseAuth.js';
 
 const router = express.Router();
 
