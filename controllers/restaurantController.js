@@ -48,3 +48,33 @@ export const searchRestaurants = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+export const getNearbyRestaurants = async (req, res) => {
+  const { lat, lng, radius = 5000 } = req.query; // radius in meters, default 5km
+
+  if (!lat || !lng) {
+    return res.status(400).json({ message: 'Latitude and Longitude are required' });
+  }
+
+  try {
+    const lngNum = parseFloat(lng);
+    const latNum = parseFloat(lat);
+    const radiusNum = parseInt(radius);
+
+    const restaurants = await Restaurant.find({
+      'location.coordinates': {
+        $near: {
+          $geometry: {
+            type: 'Point',
+            coordinates: [lngNum, latNum],
+          },
+          $maxDistance: radiusNum,
+        },
+      },
+      isOpen: true,
+    });
+    res.status(200).json(restaurants);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
