@@ -31,5 +31,7 @@ const restaurantSchema = new mongoose.Schema(
   }
 );
 
+restaurantSchema.index({ "location.coordinates": "2dsphere" });
+
 const Restaurant = mongoose.model('Restaurant', restaurantSchema);
 export default Restaurant;
