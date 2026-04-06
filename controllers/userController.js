@@ -1,4 +1,5 @@
 import User from '../models/user.js';
+import LoyaltyTransaction from '../models/loyaltyTransaction.js';
 import crypto from 'crypto';
 
 // Get current user profile
@@ -17,6 +18,14 @@ export const getProfile = async (req, res) => {
         points: 500, // Welcome bonus
         referralCode: referralCode,
         preferences: { theme: 'dark', notifications: { push: true, email: true } }
+      });
+      // Track welcome bonus
+      await LoyaltyTransaction.create({
+        user: user._id,
+        supabaseId: supabaseUser.sub,
+        amount: 500,
+        type: 'EARN',
+        description: 'Welcome bonus',
       });
     } else if (!user.referralCode) {
       // Generate referral code for existing users who don't have one
