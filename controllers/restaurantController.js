@@ -1,8 +1,13 @@
 import Restaurant from '../models/restaurant.js';
 
 export const getAllRestaurants = async (req, res) => {
+  const { cuisine } = req.query;
   try {
-    const restaurants = await Restaurant.find({ isOpen: true });
+    const filter = { isOpen: true };
+    if (cuisine) {
+      filter.cuisine = { $regex: cuisine, $options: 'i' };
+    }
+    const restaurants = await Restaurant.find(filter);
     res.status(200).json(restaurants);
   } catch (error) {
     res.status(500).json({ message: error.message });

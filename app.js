@@ -4,6 +4,7 @@ import userRoutes from './routes/userRoutes.js';
 import bookingRoutes from './routes/bookingRoutes.js';
 import restaurantRoutes from './routes/restaurantRoutes.js';
 import loyaltyRoutes from './routes/loyaltyRoutes.js';
+import favoriteRoutes from './routes/favoriteRoutes.js';
 
 const app = express();
 
@@ -16,6 +17,7 @@ app.use('/api/users', userRoutes);
 app.use('/api/bookings', bookingRoutes);
 app.use('/api/restaurants', restaurantRoutes);
 app.use('/api/loyalty', loyaltyRoutes);
+app.use('/api/favorites', favoriteRoutes);
 
 // Basic error handling middleware
 app.use((err, req, res, next) => {
