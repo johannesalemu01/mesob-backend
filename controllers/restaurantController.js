@@ -1,7 +1,18 @@
 import Restaurant from '../models/restaurant.js';
+import { mockRestaurants } from '../utils/mockData.js';
 
 export const getAllRestaurants = async (req, res) => {
   const { cuisine } = req.query;
+
+  if (!global.isDbConnected) {
+    console.log('📡 Serving MOCK restaurants (DB Offline)');
+    let filtered = [...mockRestaurants];
+    if (cuisine) {
+      filtered = filtered.filter(r => r.cuisine.toLowerCase().includes(cuisine.toLowerCase()));
+    }
+    return res.status(200).json(filtered);
+  }
+
   try {
     const filter = { isOpen: true };
     if (cuisine) {
@@ -40,6 +51,16 @@ export const createRestaurant = async (req, res) => {
 
 export const searchRestaurants = async (req, res) => {
   const { query } = req.query;
+
+  if (!global.isDbConnected) {
+    console.log('📡 Serving MOCK search results (DB Offline)');
+    const filtered = mockRestaurants.filter(r => 
+      r.name.toLowerCase().includes(query.toLowerCase()) || 
+      r.cuisine.toLowerCase().includes(query.toLowerCase())
+    );
+    return res.status(200).json(filtered);
+  }
+
   try {
     const restaurants = await Restaurant.find({
       $or: [
@@ -56,6 +77,11 @@ export const searchRestaurants = async (req, res) => {
 
 export const getNearbyRestaurants = async (req, res) => {
   const { lat, lng, radius = 5000 } = req.query; // radius in meters, default 5km
+
+  if (!global.isDbConnected) {
+    console.log('📡 Serving MOCK nearby restaurants (DB Offline)');
+    return res.status(200).json(mockRestaurants);
+  }
 
   if (!lat || !lng) {
     return res.status(400).json({ message: 'Latitude and Longitude are required' });

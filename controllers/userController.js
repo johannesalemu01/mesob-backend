@@ -1,9 +1,15 @@
 import User from '../models/user.js';
 import LoyaltyTransaction from '../models/loyaltyTransaction.js';
+import { mockUser } from '../utils/mockData.js';
 import crypto from 'crypto';
 
 // Get current user profile
 export const getProfile = async (req, res) => {
+  if (!global.isDbConnected) {
+    console.log('📡 Serving MOCK profile (DB Offline)');
+    return res.status(200).json(mockUser);
+  }
+
   try {
     const supabaseUser = req.user;
     let user = await User.findOne({ supabaseId: supabaseUser.sub });

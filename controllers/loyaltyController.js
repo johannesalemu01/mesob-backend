@@ -1,8 +1,14 @@
 import LoyaltyTransaction from '../models/loyaltyTransaction.js';
 import User from '../models/user.js';
+import { mockTransactions } from '../utils/mockData.js';
 
 // Get loyalty points history for the current user
 export const getHistory = async (req, res) => {
+  if (!global.isDbConnected) {
+    console.log('📡 Serving MOCK loyalty history (DB Offline)');
+    return res.status(200).json(mockTransactions);
+  }
+
   try {
     const supabaseId = req.user.sub;
     
