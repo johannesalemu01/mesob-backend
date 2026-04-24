@@ -22,6 +22,10 @@ export const createBooking = async (req, res) => {
 };
 
 export const getUserBookings = async (req, res) => {
+  if (!global.isDbConnected) {
+    console.log('📡 Serving MOCK bookings (Empty) (DB Offline)');
+    return res.status(200).json([]);
+  }
   try {
     const userId = req.user.sub;
     const bookings = await Booking.find({ user: userId })

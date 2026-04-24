@@ -26,6 +26,15 @@ export const getAllRestaurants = async (req, res) => {
 };
 
 export const getRestaurantById = async (req, res) => {
+  if (!global.isDbConnected) {
+    console.log(`📡 Serving MOCK restaurant (ID: ${req.params.id}) (DB Offline)`);
+    const restaurant = mockRestaurants.find(r => r._id === req.params.id);
+    if (!restaurant) {
+      return res.status(404).json({ message: 'Mock restaurant not found' });
+    }
+    return res.status(200).json(restaurant);
+  }
+
   try {
     const restaurant = await Restaurant.findById(req.params.id);
     if (!restaurant) {

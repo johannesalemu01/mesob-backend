@@ -3,6 +3,10 @@ import User from '../models/user.js';
 
 // Get all favorites for the current user
 export const getFavorites = async (req, res) => {
+  if (!global.isDbConnected) {
+    console.log('📡 Serving MOCK favorites (Empty) (DB Offline)');
+    return res.status(200).json([]);
+  }
   try {
     const supabaseId = req.user.sub;
     const user = await User.findOne({ supabaseId });

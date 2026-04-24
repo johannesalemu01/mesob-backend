@@ -1,15 +1,18 @@
 import mongoose from 'mongoose';
 
+global.isDbConnected = false;
+
 const connectDB = async () => {
-  global.isDbConnected = false;
   try {
-    await mongoose.connect(process.env.MONGO_URI);
+    const conn = await mongoose.connect(process.env.MONGO_URI, {
+      serverSelectionTimeoutMS: 5000, // Fail fast (5s) to allow mock mode to kick in
+    });
     global.isDbConnected = true;
-    console.log('🔥🔥MongoDB connected successfully');
+    console.log(`🔥🔥MongoDB connected: ${conn.connection.host}`);
   } catch (error) {
     console.error('🔥🔥MongoDB connection error:', error.message);
     console.warn('⚠️  Backend will continue in MOCK MODE.');
-    // Do NOT exit the process, allow server to run in mock mode
+    global.isDbConnected = false;
   }
 };
 

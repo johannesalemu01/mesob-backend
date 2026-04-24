@@ -12,6 +12,15 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// Health check
+app.get('/', (req, res) => {
+  res.status(200).json({
+    status: 'online',
+    mode: global.isDbConnected ? 'live' : 'mock',
+    message: 'DineEase API is running',
+  });
+});
+
 // Routes
 app.use('/api/users', userRoutes);
 app.use('/api/bookings', bookingRoutes);

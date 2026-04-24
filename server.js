@@ -6,12 +6,14 @@ dotenv.config();
 
 const PORT = process.env.PORT || 5000;
 
-// Connect to MongoDB and start server
-connectDB().then(() => {
-  app.listen(PORT, '0.0.0.0', () => {
-    console.log(`🚀 Server running on http://0.0.0.0:${PORT} (reachable at http://10.42.0.245:${PORT})`);
+// Start server immediately (helps passing Render health checks quickly)
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`🚀 Server running on port ${PORT}`);
+  console.log(`📡 Local:            http://localhost:${PORT}`);
+  
+  // Connect to DB in background
+  connectDB().catch((err) => {
+    console.error('❌ Database connection failed:', err.message);
+    // In fallback mode, we don't exit the process
   });
-}).catch((err) => {
-  console.error('❌ Database connection failed:', err.message);
-  process.exit(1);
 });
