@@ -11,7 +11,7 @@ const restaurants = [
     cuisine: 'Traditional',
     location: {
       address: 'Abay Mado, Bahir Dar',
-      coordinates: { lat: 11.59, lng: 37.39 }
+      coordinates: [37.39, 11.59]
     },
     images: ['https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=800'],
     rating: 4.8,
@@ -29,7 +29,7 @@ const restaurants = [
     cuisine: 'Modern',
     location: {
       address: 'Abay Mado, near Tele',
-      coordinates: { lat: 11.60, lng: 37.40 }
+      coordinates: [37.40, 11.60]
     },
     images: ['https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800'],
     rating: 4.5,
@@ -47,7 +47,7 @@ const restaurants = [
     cuisine: 'Vegan',
     location: {
       address: 'Piazza, Bahir Dar',
-      coordinates: { lat: 11.58, lng: 37.38 }
+      coordinates: [37.38, 11.58]
     },
     images: ['https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=800'],
     rating: 4.9,
@@ -65,7 +65,7 @@ const restaurants = [
     cuisine: 'Italian',
     location: {
       address: 'Lake Shore, Bahir Dar',
-      coordinates: { lat: 11.61, lng: 37.41 }
+      coordinates: [37.41, 11.61]
     },
     images: ['https://images.unsplash.com/photo-1498579150354-97251c0dfb6c?w=800'],
     rating: 4.7,

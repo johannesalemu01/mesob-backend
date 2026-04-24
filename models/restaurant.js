@@ -7,9 +7,10 @@ const restaurantSchema = new mongoose.Schema(
     cuisine: { type: String, required: true },
     location: {
       address: { type: String, required: true },
+      type: { type: String, enum: ['Point'], default: 'Point' },
       coordinates: {
-        lat: Number,
-        lng: Number,
+        type: [Number], // [longitude, latitude]
+        required: true,
       },
     },
     images: [{ type: String }],
